@@ -1,23 +1,36 @@
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import React from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import {useForm, FieldValues} from 'react-hook-form';
 import {Background, FormInput, Gap} from '../../components';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ParamListBase} from '@react-navigation/native';
+import {useSignInMutation, useUserQuery} from '../../redux/api/authApiSlice';
 
-type SignUpProps = NativeStackScreenProps<ParamListBase, 'SignIn'>;
+type SignInProps = NativeStackScreenProps<ParamListBase, 'SignIn'>;
 
-export default function SignIn({navigation}: SignUpProps) {
+export default function SignIn({navigation}: SignInProps) {
+  const [signIn, {isLoading, isSuccess}] = useSignInMutation();
+
+  useEffect(() => {
+    // console.log(isSuccess);
+  }, [isSuccess]);
+
+  function submitForm(values: FieldValues) {
+    signIn(values);
+  }
+
   const {
     control,
     formState: {errors},
     handleSubmit,
   } = useForm();
-
-  function submitForm(values: FieldValues) {
-    console.log(values);
-  }
 
   return (
     <View style={{flex: 1}}>
@@ -46,7 +59,11 @@ export default function SignIn({navigation}: SignUpProps) {
           useForeground
           onPress={handleSubmit(submitForm)}>
           <View style={styles.btnSubmit}>
-            <Text style={styles.textBtnSubmit}>Masuk</Text>
+            {isLoading ? (
+              <ActivityIndicator color={'white'} />
+            ) : (
+              <Text style={styles.textBtnSubmit}>Masuk</Text>
+            )}
           </View>
         </TouchableNativeFeedback>
         <Gap height={10} />
