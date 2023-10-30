@@ -1,14 +1,22 @@
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import {useForm, FieldValues} from 'react-hook-form';
 import {Background, FormInput, Gap} from '../../components';
 
+import {useSignUpMutation} from '../../redux/api/authApiSlice';
+
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ParamListBase} from '@react-navigation/native';
-
 type SignUpProps = NativeStackScreenProps<ParamListBase, 'SignUp'>;
 
 export default function SignUp({navigation}: SignUpProps) {
+  const [signUp, {isLoading}] = useSignUpMutation();
   const {
     control,
     formState: {errors},
@@ -16,7 +24,17 @@ export default function SignUp({navigation}: SignUpProps) {
   } = useForm();
 
   function submitForm(values: FieldValues) {
-    console.log(values);
+    const formData = {
+      ...values,
+      division: 32,
+      department: 88,
+      branch: 3,
+      gender: 'Pria',
+      position: 'Staff',
+      phone_number: 628123456789,
+      device_model: Math.random(),
+    };
+    signUp(formData);
   }
 
   return (
@@ -55,7 +73,11 @@ export default function SignUp({navigation}: SignUpProps) {
           useForeground
           onPress={handleSubmit(submitForm)}>
           <View style={styles.btnSubmit}>
-            <Text style={styles.textBtnSubmit}>Daftar</Text>
+            {isLoading ? (
+              <ActivityIndicator color={'white'} />
+            ) : (
+              <Text style={styles.textBtnSubmit}>Daftar</Text>
+            )}
           </View>
         </TouchableNativeFeedback>
         <Gap height={10} />
