@@ -1,5 +1,6 @@
-import {setToken} from '../slices/authSlice';
+import {setToken, setUser} from '../slices/authSlice';
 import {apiSlice} from './apiSlice';
+import axios from 'axios';
 
 interface ErrorResponse {
   error: {
@@ -30,17 +31,23 @@ export const authApiSlice = apiSlice.injectEndpoints({
       },
     }),
     signIn: builder.mutation({
-      query: credentials => ({
+      query: ({credentials}) => ({
         url: '/login',
         method: 'POST',
         body: credentials,
       }),
       invalidatesTags: ['User'],
-      async onQueryStarted(arg, {dispatch, queryFulfilled}) {
+      async onQueryStarted({navigation}, {dispatch, queryFulfilled}) {
         try {
-          const {data} = await queryFulfilled;
-          dispatch(setToken(data.token));
-          console.log('SUCCESS:', data);
+          const {data, meta} = await queryFulfilled;
+
+          const url: any = meta?.response?.url.replace('login', 'user');
+          const {data: userData} = await axios.get(url, {
+            headers: {Authorization: `Bearer ${data.token}`},
+          });
+
+          dispatch(setUser({token: data.token, user: userData.user}));
+          navigation.replace('Home');
         } catch (error) {
           const response = error as ErrorResponse;
           if (response.error) {
