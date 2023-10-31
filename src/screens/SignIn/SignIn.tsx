@@ -5,25 +5,21 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useForm, FieldValues} from 'react-hook-form';
 import {Background, FormInput, Gap} from '../../components';
 
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ParamListBase} from '@react-navigation/native';
-import {useSignInMutation, useUserQuery} from '../../redux/api/authApiSlice';
+import {useSignInMutation} from '../../redux/api/authApiSlice';
 
 type SignInProps = NativeStackScreenProps<ParamListBase, 'SignIn'>;
 
 export default function SignIn({navigation}: SignInProps) {
-  const [signIn, {isLoading, isSuccess}] = useSignInMutation();
-
-  useEffect(() => {
-    // console.log(isSuccess);
-  }, [isSuccess]);
+  const [signIn, {isLoading}] = useSignInMutation();
 
   function submitForm(values: FieldValues) {
-    signIn(values);
+    signIn({credentials: values, navigation});
   }
 
   const {
