@@ -7,7 +7,7 @@ import {RootState} from '../../../redux';
 export default function UserProfile() {
   const {name, email} = useSelector((state: RootState) => state.auth.user);
   return (
-    <View style={{flexDirection: 'row', margin: 20}}>
+    <View style={{flexDirection: 'row'}}>
       <View style={styles.viewAccount}>
         <Icon name="account-circle" color={'black'} size={50} />
         <View style={{width: 10}} />
@@ -15,7 +15,9 @@ export default function UserProfile() {
           <Text style={styles.textName} numberOfLines={2}>
             {name}
           </Text>
-          <Text style={{color: 'grey'}}>{email}</Text>
+          <Text style={{color: 'grey'}} numberOfLines={1}>
+            {email}
+          </Text>
         </View>
       </View>
       <View style={{width: 10}} />
