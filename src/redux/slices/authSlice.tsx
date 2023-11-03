@@ -1,5 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface AuthState {
   token: string;
@@ -14,9 +13,9 @@ export interface AuthState {
 const initialState: AuthState = {
   token: '',
   user: {
-    email: '',
+    email: 'placeholder@email.com',
     id: 0,
-    name: '',
+    name: 'Placeholder',
     role: '',
   },
 };
