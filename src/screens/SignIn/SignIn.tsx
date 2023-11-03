@@ -48,6 +48,7 @@ export default function SignIn({navigation}: SignInProps) {
             iconName="lock-outline"
             title="Password"
             placeholder="Masukan password"
+            autoCapitalize="none"
           />
         </View>
         <Gap height={15} />
