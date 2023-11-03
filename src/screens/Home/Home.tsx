@@ -1,19 +1,31 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
-import {Background, Header, UserProfile} from '../../components';
+import {
+  Background,
+  FloatingButton,
+  Header,
+  UserProfile,
+  YaumiGraph,
+  Gap,
+  YaumiCalendar,
+} from '../../components';
 
 export default function Home() {
   return (
     <View style={{flex: 1}}>
       <Background />
-      <View>
-        <ScrollView>
-          <View style={styles.container}>
-            <Header />
-            <UserProfile />
-          </View>
-        </ScrollView>
-      </View>
+      <ScrollView>
+        <Header />
+        <View style={styles.container}>
+          <UserProfile />
+          <Gap height={20} />
+          <YaumiGraph />
+          <Gap height={20} />
+          <YaumiCalendar />
+          <Gap height={80} />
+        </View>
+      </ScrollView>
+      <FloatingButton />
     </View>
   );
 }
@@ -24,5 +36,6 @@ const styles = StyleSheet.create({
     maxWidth: 480,
     width: '100%',
     flex: 1,
+    padding: 20,
   },
 });
