@@ -1,7 +1,8 @@
-import {setToken, setUser} from '../slices/authSlice';
+import {setUser} from '../slices/authSlice';
 import {apiSlice} from './apiSlice';
 import axios from 'axios';
-
+import EncryptedStorage from 'react-native-encrypted-storage';
+import axiosInstance from './axiosInstance';
 interface ErrorResponse {
   error: {
     data: {
@@ -37,7 +38,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
       invalidatesTags: ['User'],
-      async onQueryStarted({navigation}, {dispatch, queryFulfilled}) {
+      async onQueryStarted(
+        {credentials, navigation, from},
+        {dispatch, queryFulfilled},
+      ) {
         try {
           const {data, meta} = await queryFulfilled;
 
@@ -47,11 +51,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
           });
 
           dispatch(setUser({token: data.token, user: userData.user}));
+
+          await EncryptedStorage.setItem(
+            'user_credentials',
+            JSON.stringify(credentials),
+          );
+
           navigation.replace('Home');
         } catch (error) {
           const response = error as ErrorResponse;
           if (response.error) {
             console.log('RESPONSE ERROR:', response.error.data);
+            from == 'splash' && navigation.replace('SignIn');
           } else console.log('SYNTAX ERROR:', error);
         }
       },
@@ -62,20 +73,31 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      async onQueryStarted(arg, {dispatch, queryFulfilled}) {
+      async onQueryStarted(credentials, {dispatch, queryFulfilled}) {
+        console.log(credentials);
         try {
           const {data} = await queryFulfilled;
+
+          const {data: data_login} = await axiosInstance().post(
+            '/login',
+            credentials,
+          );
+          const {data: data_user} = await axiosInstance(data_login.token).get(
+            '/user',
+          );
+
           console.log('SUCCESS:', data);
-        } catch (error) {
+          console.log('SUCCESS2:', data_login);
+          console.log('SUCCESS3:', data_user);
+        } catch (error: any) {
           const response = error as ErrorResponse;
           if (response.error) {
             console.log('RESPONSE ERROR:', response.error.data);
-          } else console.log('SYNTAX ERROR:', error);
+          } else console.log('SYNTAX ERROR:', error?.response.data);
         }
       },
     }),
   }),
 });
 
-export const {useSignInMutation, useSignUpMutation, useUserQuery} =
-  authApiSlice;
+export const {useSignInMutation, useSignUpMutation} = authApiSlice;
