@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, StatusBar} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function Header() {
+export default function HeaderHome() {
   return (
     <View style={styles.container}>
       <Icon
