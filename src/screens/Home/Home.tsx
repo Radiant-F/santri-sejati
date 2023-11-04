@@ -3,7 +3,7 @@ import React from 'react';
 import {
   Background,
   FloatingButton,
-  Header,
+  HeaderHome,
   UserProfile,
   YaumiGraph,
   Gap,
@@ -15,7 +15,7 @@ export default function Home() {
     <View style={{flex: 1}}>
       <Background />
       <ScrollView>
-        <Header />
+        <HeaderHome />
         <View style={styles.container}>
           <UserProfile />
           <Gap height={20} />
