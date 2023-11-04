@@ -1,10 +1,14 @@
 import {StyleSheet, Text, View, TouchableNativeFeedback} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
 
 export default function FloatingButton() {
+  const navigation = useNavigation();
   return (
-    <TouchableNativeFeedback useForeground>
+    <TouchableNativeFeedback
+      useForeground
+      onPress={() => navigation.navigate('YaumiForm')}>
       <View style={styles.container}>
         <Icon name={'format-list-bulleted-square'} color={'white'} size={30} />
         <View style={{width: 10}} />
