@@ -41,17 +41,73 @@ export default function YaumiCalendar() {
       </View>
       <View style={{height: 10}} />
       <View style={styles.viewCalendar}>
-        {[...Array(31).keys()].map((val, index) => (
-          <View key={index} style={styles.viewDate}>
-            <Text>{index + 1}</Text>
+        <View style={styles.viewDates}>
+          {[...Array(31).keys()].map((val, index) => (
+            <View key={index} style={styles.viewDate}>
+              <Text>{index + 1}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.viewDetail}>
+          <View>
+            <View style={styles.viewStatus}>
+              <Text style={styles.textStatus}>Mengisi</Text>
+            </View>
+            <View style={{height: 5}} />
+            <View style={{...styles.viewStatus, backgroundColor: 'orange'}}>
+              <Text style={{...styles.textStatus, color: 'black'}}>
+                Belum Mengisi
+              </Text>
+            </View>
           </View>
-        ))}
+          <TouchableNativeFeedback useForeground>
+            <View style={styles.btnCalendar}>
+              <Icon name="calendar-multiple" color={'black'} size={25} />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  textStatus: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  viewStatus: {
+    backgroundColor: 'green',
+    height: 22.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25 / 2,
+    elevation: 3,
+    paddingHorizontal: 20,
+  },
+  viewDetail: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  btnCalendar: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    elevation: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewCalendar: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    elevation: 5,
+  },
   viewDate: {
     width: 40,
     height: 40,
@@ -61,10 +117,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 5,
   },
-  viewCalendar: {
-    backgroundColor: 'white',
-    elevation: 5,
-    borderRadius: 20,
+  viewDates: {
     flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'center',
