@@ -22,12 +22,18 @@ export default function Header({title = 'Header'}: Props) {
           <Icon name="chevron-left" color={'white'} size={25} />
         </View>
       </TouchableNativeFeedback>
-      <Text>Header</Text>
+      <View style={{width: 10}} />
+      <Text style={styles.textTitle}>{title}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  textTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
   btnBack: {
     width: 50,
     height: 50,
@@ -38,5 +44,8 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: StatusBar.currentHeight,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
 });
