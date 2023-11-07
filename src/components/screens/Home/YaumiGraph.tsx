@@ -4,10 +4,8 @@ import {BarChart} from 'react-native-chart-kit';
 import {ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux';
-import {useYaumiQuery} from '../../../redux/api/yaumiApiSlice';
 
 export default function YaumiGraph() {
-  const {} = useYaumiQuery(null);
   const yaumi = useSelector((state: RootState) => state.yaumi.graph_data);
 
   const data = {
