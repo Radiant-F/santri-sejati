@@ -1,4 +1,4 @@
-import {setYaumi} from '../slices/yaumiSlice';
+import {setCalendar, setYaumi} from '../slices/yaumiSlice';
 import {apiSlice} from './apiSlice';
 
 const yaumiApiSlice = apiSlice.injectEndpoints({
@@ -11,18 +11,18 @@ const yaumiApiSlice = apiSlice.injectEndpoints({
           const {data} = await queryFulfilled;
           dispatch(setYaumi(data.persentase_amal.original));
         } catch (error) {
-          console.log('ERROR:', error);
+          console.log('ERROR YAUMI:', error);
         }
       },
     }),
     yaumiCalendar: builder.query({
       query: month => `/month/calendar/${month}`,
-      async onQueryStarted(arg, {queryFulfilled}) {
+      async onQueryStarted(arg, {queryFulfilled, dispatch}) {
         try {
           const {data} = await queryFulfilled;
-          console.log('SUCCESS:', Object.values(data));
+          dispatch(setCalendar(Object.values(data)));
         } catch (error) {
-          console.log('ERROR:', error);
+          console.log('ERROR YAUMI CALENDAR:', error);
         }
       },
     }),
