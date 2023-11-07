@@ -1,7 +1,6 @@
 import Gap from './screens/Gap';
 import FormInput from './screens/Auth/FormInput';
 import Background from './screens/Background';
-import HeaderHome from './screens/Home/Header';
 import UserProfile from './screens/Home/UserProfile';
 import FloatingButton from './screens/Home/FloatingButton';
 import YaumiGraph from './screens/Home/YaumiGraph';
@@ -13,7 +12,6 @@ export {
   Gap,
   FormInput,
   Background,
-  HeaderHome,
   UserProfile,
   FloatingButton,
   YaumiGraph,
