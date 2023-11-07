@@ -43,12 +43,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
         {dispatch, queryFulfilled},
       ) {
         try {
-          const {data, meta} = await queryFulfilled;
+          const {data} = await queryFulfilled;
 
-          const url: any = meta?.response?.url.replace('login', 'user');
-          const {data: userData} = await axios.get(url, {
-            headers: {Authorization: `Bearer ${data.token}`},
-          });
+          const {data: userData} = await axiosInstance(data.token).get('/user');
 
           dispatch(setUser({token: data.token, user: userData.user}));
 
