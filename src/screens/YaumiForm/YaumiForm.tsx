@@ -9,8 +9,12 @@ import React, {useState} from 'react';
 import {Background, Gap, Header} from '../../components';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ParamListBase} from '@react-navigation/native';
 
-export default function YaumiForm() {
+type Props = NativeStackScreenProps<ParamListBase, 'YaumiForm'>;
+
+export default function YaumiForm({navigation}: Props) {
   const [amalan, setAmalan] = useState([
     {
       status: 1,
@@ -62,7 +66,7 @@ export default function YaumiForm() {
     <View style={{flex: 1}}>
       <Background />
       <ScrollView stickyHeaderIndices={[0]} stickyHeaderHiddenOnScroll>
-        <Header title={'Isi Yaumi'} />
+        <Header title={'Isi Yaumi'} onPress={() => navigation.goBack()} />
         <View style={styles.container}>
           {amalan.map((value, index) => {
             return (
