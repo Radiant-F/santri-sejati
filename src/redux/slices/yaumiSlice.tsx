@@ -27,6 +27,7 @@ const initialState = {
       didnt: 0,
     },
   },
+  calendar: [false, false, false, false, false],
 };
 
 const yaumiSlice = createSlice({
@@ -36,9 +37,12 @@ const yaumiSlice = createSlice({
     setYaumi(state, {payload}) {
       state.graph_data = payload;
     },
+    setCalendar(state, {payload}) {
+      state.calendar = payload;
+    },
   },
 });
 
-export const {setYaumi} = yaumiSlice.actions;
+export const {setYaumi, setCalendar} = yaumiSlice.actions;
 
 export default yaumiSlice.reducer;
