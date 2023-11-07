@@ -14,7 +14,7 @@ export default function Navigation() {
           statusBarTranslucent: true,
           statusBarColor: 'transparent',
         }}
-        initialRouteName="Home">
+        initialRouteName="SplashScreen">
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
