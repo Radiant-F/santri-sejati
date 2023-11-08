@@ -7,7 +7,8 @@ import type {
 } from '@reduxjs/toolkit/query/react';
 import {Mutex} from 'async-mutex';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {setToken} from '../slices/authSlice';
+import {setToken, setUser} from '../slices/authSlice';
+import axiosInstance from './axiosInstance';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'https://dev.pondokdigital.pondokqu.id/api',
@@ -49,8 +50,10 @@ const baseQueryWithReauth: BaseQueryFn<
           api,
           extraOptions,
         );
+        const {data: userData} = await axiosInstance(data.token).get('/user');
 
-        api.dispatch(setToken(data.token));
+        api.dispatch(setUser({token: data.token, user: userData.user}));
+
         result = await baseQuery(args, api, extraOptions);
       } catch (error) {
         console.log('ERROR REAUTH:', error);
@@ -68,5 +71,5 @@ const baseQueryWithReauth: BaseQueryFn<
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: builder => ({}),
-  tagTypes: ['User'],
+  tagTypes: ['User', 'Yaumi'],
 });
