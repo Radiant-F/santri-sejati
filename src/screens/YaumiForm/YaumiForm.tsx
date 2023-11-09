@@ -10,12 +10,17 @@ import React, {useState} from 'react';
 import {Background, Gap, Header} from '../../components';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {useYaumiFormMutation} from '../../redux/api/yaumiApiSlice';
+
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ParamListBase} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<ParamListBase, 'YaumiForm'>;
 
 export default function YaumiForm({navigation}: Props) {
+  const [yaumiForm, {isLoading}] = useYaumiFormMutation();
+
   const [amalan, setAmalan] = useState([
     {
       status: 1,
@@ -97,7 +102,7 @@ export default function YaumiForm({navigation}: Props) {
       quran_hafalan_quran: amalan[8].status,
       lain_sholawat_100: amalan[9].status,
     };
-    console.log(formData);
+    yaumiForm({body: formData});
   }
 
   return (
@@ -139,9 +144,14 @@ export default function YaumiForm({navigation}: Props) {
         <Gap height={20} />
         <TouchableNativeFeedback useForeground onPress={submitForm}>
           <View style={styles.btnSave}>
-            <Icon name="content-save-outline" color={'white'} size={20} />
-            <Text style={styles.textSave}>Simpan</Text>
-            <ActivityIndicator color={'white'} />
+            {isLoading ? (
+              <ActivityIndicator color={'white'} />
+            ) : (
+              <>
+                <Icon name="content-save-outline" color={'white'} size={20} />
+                <Text style={styles.textSave}>Simpan</Text>
+              </>
+            )}
           </View>
         </TouchableNativeFeedback>
         <Gap height={30} />
