@@ -47,7 +47,7 @@ const yaumiApiSlice = apiSlice.injectEndpoints({
     }),
     yaumiForm: builder.mutation({
       query: ({body}) => ({
-        url: '',
+        url: '/yaumi',
         method: 'POST',
         body,
       }),
