@@ -18,24 +18,15 @@ const yaumiApiSlice = apiSlice.injectEndpoints({
       },
     }),
     yaumiCalendar: builder.query({
-      query: month => `/month/calendar/${month}`,
+      query: month => `/month/calendar/${month + 1}`,
       providesTags: ['Yaumi'],
       async onQueryStarted(arg, {queryFulfilled, dispatch, getState}) {
         try {
           const {data} = await queryFulfilled;
-          const {calendar} = (getState() as RootState).yaumi;
-          // const combined = Object.values(data).forEach((value, index) => {
-          //   if (index < calendar.length) return value;
-          //   return calendar[index];
-          // });
-          // const combined = Object.values(data).map((value, index) => {
-          //   if (index < calendar.length) return value;
-          //   return calendar[index];
-          // });
-          const combined = calendar.map((value, index) => {
-            if (index < Object.values(data).length) {
+          const {month} = (getState() as RootState).yaumi.calendar;
+          const combined = month.map((value, index) => {
+            if (index < Object.values(data).length)
               return Object.values(data)[index];
-            }
             return value;
           });
 
@@ -55,6 +46,7 @@ const yaumiApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted({navigation}, {dispatch, queryFulfilled}) {
         try {
           const {data} = await queryFulfilled;
+          navigation.goBack();
           console.log('SUCCESS YAUMI FORM', data);
         } catch (error) {
           console.log('ERROR YAUMI FORM', error);
