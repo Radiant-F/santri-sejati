@@ -23,23 +23,23 @@ export default function YaumiForm({navigation}: Props) {
 
   const [amalan, setAmalan] = useState([
     {
-      status: 1,
+      status: 0,
       name: 'Sholat Subuh',
     },
     {
-      status: 1,
+      status: 0,
       name: 'Sholat Dzuhur',
     },
     {
-      status: 1,
+      status: 0,
       name: 'Sholat Ashar',
     },
     {
-      status: 1,
+      status: 0,
       name: 'Sholat Maghrib',
     },
     {
-      status: 1,
+      status: 0,
       name: 'Sholat Isya',
     },
     {
@@ -47,7 +47,7 @@ export default function YaumiForm({navigation}: Props) {
       name: 'Sholat Dhuha',
     },
     {
-      status: 1,
+      status: 0,
       name: 'ODOJ',
     },
     {
@@ -65,6 +65,38 @@ export default function YaumiForm({navigation}: Props) {
   ]);
 
   function handleChecklist(id: number) {
+    setAmalan(amalans => {
+      return amalans.map((amalan, index) => {
+        if (index == id)
+          return {
+            ...amalan,
+            status: amalan.status == 0 ? 1 : 0,
+          };
+        else return amalan;
+        // return index == id
+        //   ? {...amalan, status: amalan.status == 0 ? 1 : 0}
+        //   : amalan;
+      });
+    });
+  }
+
+  function submitForm() {
+    const formData = {
+      sholat_subuh: amalan[0].status,
+      sholat_dzuhur: amalan[1].status,
+      sholat_ashar: amalan[2].status,
+      sholat_maghrib: amalan[3].status,
+      sholat_isya: amalan[4].status,
+      sholat_dhuha: amalan[5].status,
+      odoj_umum: amalan[6].status,
+      donasi_infaq: amalan[7].status,
+      quran_hafalan_quran: amalan[8].status,
+      lain_sholawat_100: amalan[9].status,
+    };
+    yaumiForm({body: formData, navigation});
+  }
+
+  function handleChecklistDraft(id: number) {
     setAmalan(amalans => {
       return amalans.map((amalan, index) => {
         const status_amalan =
@@ -89,22 +121,6 @@ export default function YaumiForm({navigation}: Props) {
     });
   }
 
-  function submitForm() {
-    const formData = {
-      sholat_subuh: amalan[0].status,
-      sholat_dzuhur: amalan[1].status,
-      sholat_ashar: amalan[2].status,
-      sholat_maghrib: amalan[3].status,
-      sholat_isya: amalan[4].status,
-      sholat_dhuha: amalan[5].status,
-      odoj_umum: amalan[6].status,
-      donasi_infaq: amalan[7].status,
-      quran_hafalan_quran: amalan[8].status,
-      lain_sholawat_100: amalan[9].status,
-    };
-    yaumiForm({body: formData});
-  }
-
   return (
     <View style={{flex: 1}}>
       <Background />
@@ -112,13 +128,14 @@ export default function YaumiForm({navigation}: Props) {
         <Header title={'Isi Yaumi'} onPress={() => navigation.goBack()} />
         <View style={styles.container}>
           {amalan.map((value, index) => {
-            const valueStatus =
-              (value.name == 'Sholat Dhuha' && value.status == 1) ||
-              (value.name.includes('Sholat') && value.status == 2) ||
-              (!value.name.includes('Sholat') &&
-                !value.name.includes('ODOJ') &&
-                value.status == 1) ||
-              value.status == 2;
+            // const valueStatus =
+            //   (value.name == 'Sholat Dhuha' && value.status == 1) ||
+            //   (value.name.includes('Sholat') && value.status == 2) ||
+            //   (!value.name.includes('Sholat') &&
+            //     !value.name.includes('ODOJ') &&
+            //     value.status == 1) ||
+            //   value.status == 2;
+            const valueStatus = value.status == 1;
 
             return (
               <TouchableNativeFeedback
