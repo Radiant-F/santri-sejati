@@ -17,20 +17,27 @@ import {
   YaumiCalendar,
   Header,
 } from '../../components';
-import {ParamListBase} from '@react-navigation/native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
 import EncryptedStorage from 'react-native-encrypted-storage';
+
+import {useSelector} from 'react-redux';
 import {
   useYaumiCalendarQuery,
   useYaumiQuery,
 } from '../../redux/api/yaumiApiSlice';
 
+import {ParamListBase} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootState} from '../../redux';
 type Props = NativeStackScreenProps<ParamListBase, 'Home'>;
 
 export default function Home({navigation}: Props) {
-  const {isLoading: loadingYaumi, refetch: refetchYaumi} = useYaumiQuery(null);
-  const {isLoading: loadingCalendar, refetch: refetchYaumiCalendar} =
-    useYaumiCalendarQuery(new Date().getMonth() + 1);
+  const {selected_month} = useSelector(
+    (state: RootState) => state.yaumi.calendar,
+  );
+  const {isFetching: loadingYaumi, refetch: refetchYaumi} = useYaumiQuery(null);
+  const {isFetching: loadingCalendar, refetch: refetchYaumiCalendar} =
+    useYaumiCalendarQuery(selected_month);
 
   async function signOut() {
     try {
