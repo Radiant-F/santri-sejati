@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-function getDaysInMonth() {
-  switch (new Date().getMonth()) {
+function getDaysInMonth(currentMonth: number) {
+  switch (currentMonth) {
     case 0: // January
     case 2: // March
     case 4: // May
@@ -55,7 +55,11 @@ const initialState = {
       didnt: 0,
     },
   },
-  calendar: Array(getDaysInMonth()).fill(false),
+
+  calendar: {
+    month: Array(getDaysInMonth(new Date().getMonth())).fill(false),
+    selected_month: new Date().getMonth(),
+  },
 };
 
 const yaumiSlice = createSlice({
@@ -66,11 +70,15 @@ const yaumiSlice = createSlice({
       state.graph_data = payload;
     },
     setCalendar(state, {payload}) {
-      state.calendar = payload;
+      state.calendar.month = payload;
+    },
+    setSelectedMonth(state, {payload}) {
+      state.calendar.selected_month = payload;
+      state.calendar.month = Array(getDaysInMonth(payload)).fill(false);
     },
   },
 });
 
-export const {setYaumi, setCalendar} = yaumiSlice.actions;
+export const {setYaumi, setCalendar, setSelectedMonth} = yaumiSlice.actions;
 
 export default yaumiSlice.reducer;
