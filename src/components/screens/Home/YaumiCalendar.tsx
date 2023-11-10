@@ -1,12 +1,28 @@
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../redux';
-import {useDaysInMonth} from '../../../hooks';
+import {useYaumiCalendarQuery} from '../../../redux/api/yaumiApiSlice';
+import {setSelectedMonth} from '../../../redux/slices/yaumiSlice';
 
 export default function YaumiCalendar() {
-  const {calendar} = useSelector((state: RootState) => state.yaumi);
+  const dispatch = useDispatch();
+  const {month, selected_month} = useSelector(
+    (state: RootState) => state.yaumi.calendar,
+  );
+  const {refetch, isFetching} = useYaumiCalendarQuery(selected_month);
+  useEffect(() => {
+    refetch();
+  }, [selected_month]);
+
   const [monthIndex, setMonthIndex] = useState(new Date().getMonth());
   const months = [
     'Januari',
@@ -23,33 +39,61 @@ export default function YaumiCalendar() {
     'Desember',
   ];
 
-  const daysInMonth: number = useDaysInMonth(new Date().getMonth());
+  const disableNext = selected_month == new Date().getMonth() || isFetching;
+  const disablePrev = selected_month == 0 || isFetching;
+
+  function navigateMonth(nextMonth: Boolean) {
+    const selectedMonth = nextMonth ? selected_month + 1 : selected_month - 1;
+    dispatch(setSelectedMonth(selectedMonth));
+  }
 
   return (
     <View>
       <View style={styles.viewHeader}>
-        <TouchableNativeFeedback useForeground>
+        <TouchableNativeFeedback
+          useForeground
+          disabled={disablePrev}
+          onPress={() => navigateMonth(false)}>
           <View style={styles.btnMonthNav}>
-            <Icon name="chevron-left" size={30} color={'black'} />
+            <Icon
+              name="chevron-left"
+              size={30}
+              color={disablePrev ? 'grey' : 'black'}
+            />
           </View>
         </TouchableNativeFeedback>
         <View style={styles.viewTextMonth}>
-          <Text style={styles.textMonth}>{months[monthIndex]}</Text>
+          <Text style={styles.textMonth}>{months[selected_month]}</Text>
         </View>
-        <TouchableNativeFeedback useForeground>
+        <TouchableNativeFeedback
+          useForeground
+          disabled={disableNext}
+          onPress={() => navigateMonth(true)}>
           <View style={styles.btnMonthNav}>
-            <Icon name="chevron-right" size={30} color={'black'} />
+            <Icon
+              name="chevron-right"
+              size={30}
+              color={disableNext ? 'grey' : 'black'}
+            />
           </View>
         </TouchableNativeFeedback>
       </View>
       <View style={{height: 10}} />
       <View style={styles.viewCalendar}>
         <View style={styles.viewDates}>
-          {calendar?.map((val, index) => (
-            <View key={index} style={styles.viewDate}>
-              <Text>{index + 1}</Text>
-            </View>
-          ))}
+          {month?.map((value, index) => {
+            const status = value ? 'green' : 'orange';
+            const textStatus = value ? 'white' : 'black';
+            return (
+              <View
+                key={index}
+                style={{...styles.viewDate, backgroundColor: status}}>
+                <Text style={{fontWeight: 'bold', color: textStatus}}>
+                  {index + 1}
+                </Text>
+              </View>
+            );
+          })}
         </View>
         <View style={styles.viewDetail}>
           <View>
@@ -59,7 +103,7 @@ export default function YaumiCalendar() {
             <View style={{height: 5}} />
             <View style={{...styles.viewStatus, backgroundColor: 'orange'}}>
               <Text style={{...styles.textStatus, color: 'black'}}>
-                Belum Mengisi
+                Tidak/Belum Mengisi
               </Text>
             </View>
           </View>
@@ -133,6 +177,8 @@ const styles = StyleSheet.create({
     height: 35,
     paddingHorizontal: 20,
     justifyContent: 'center',
+    width: 125,
+    alignItems: 'center',
   },
   textMonth: {
     color: 'black',
