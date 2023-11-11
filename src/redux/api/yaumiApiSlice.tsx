@@ -29,7 +29,7 @@ const yaumiApiSlice = apiSlice.injectEndpoints({
               return Object.values(data)[index];
             return value;
           });
-
+          console.log(data);
           dispatch(setCalendar(combined));
         } catch (error) {
           console.log('ERROR YAUMI CALENDAR:', error);
